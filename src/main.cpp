@@ -11,14 +11,15 @@
 #include <GL/glu.h>
 #endif // __APPLE__
 
+#include "application/Application.h"
+
 const int width = 640;
 const int height = 480;
-
-void cube_draw(float xrf, float yrf, float zrf);
 
 int main(int argc, const char **argv)
 {
     SDL_Window *window = NULL;
+    Application *app = NULL;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "Failed to init SDL : " << SDL_GetError() << std::endl;
@@ -50,38 +51,9 @@ int main(int argc, const char **argv)
     gluPerspective(45.0f, (float) width / (float) height, 0.1f, 100.0f);
     glMatrixMode(GL_MODELVIEW);
 
-    bool running = true;
-    float xrf = 0, yrf = 0, zrf = 0;
-
-    while (running) {
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event)) {
-            switch(event.type){
-            case SDL_QUIT:
-                running = false;
-                break;
-
-            case SDL_KEYDOWN:
-                switch(event.key.keysym.sym) {
-                case SDLK_ESCAPE:
-                    running = false;
-                    break;
-
-                }
-                break;
-            }
-        }
-
-        xrf -= 0.5;
-        yrf -= 0.5;
-        zrf -= 0.5;
-
-        cube_draw(xrf, yrf, zrf);
-
-        glFlush();
-        SDL_GL_SwapWindow(window);
-    }
+    app = new Application(window);
+    app->run();
+    delete app;
 
     SDL_GL_DeleteContext(glcontext);
 
@@ -93,54 +65,3 @@ int main(int argc, const char **argv)
     return EXIT_SUCCESS;
 }
 
-void cube_draw(float xrf, float yrf, float zrf)
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -7.0f);
-
-    glRotatef(xrf, 1.0f, 0.0f, 0.0f);
-    glRotatef(yrf, 0.0f, 1.0f, 0.0f);
-    glRotatef(zrf, 0.0f, 0.0f, 1.0f);
-
-    glBegin(GL_QUADS);
-
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f( 1.0f, 1.0f, -1.0f);
-    glVertex3f(-1.0f, 1.0f, -1.0f);
-    glVertex3f(-1.0f, 1.0f,  1.0f);
-    glVertex3f( 1.0f, 1.0f,  1.0f);
-
-    glColor3f(1.0f, 0.5f, 0.0f);
-    glVertex3f( 1.0f, -1.0f,  1.0f);
-    glVertex3f(-1.0f, -1.0f,  1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f( 1.0f, -1.0f, -1.0f);
-
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex3f( 1.0f,  1.0f, 1.0f);
-    glVertex3f(-1.0f,  1.0f, 1.0f);
-    glVertex3f(-1.0f, -1.0f, 1.0f);
-    glVertex3f( 1.0f, -1.0f, 1.0f);
-
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glVertex3f( 1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f,  1.0f, -1.0f);
-    glVertex3f( 1.0f,  1.0f, -1.0f);
-
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(-1.0f,  1.0f,  1.0f);
-    glVertex3f(-1.0f,  1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f,  1.0f);
-
-    glColor3f(1.0f, 0.0f, 1.0f);
-    glVertex3f( 1.0f,  1.0f, -1.0f);
-    glVertex3f( 1.0f,  1.0f,  1.0f);
-    glVertex3f( 1.0f, -1.0f,  1.0f);
-    glVertex3f( 1.0f, -1.0f, -1.0f);
-
-    glEnd();
-}
