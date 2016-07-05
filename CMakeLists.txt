@@ -3,7 +3,7 @@ project(demo-scene)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 # CMAKE extensions
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
@@ -26,6 +26,7 @@ include_directories("${CMAKE_SOURCE_DIR}/src")
 
 set(SOURCES
     src/main.cpp
+    src/application/Application.cpp
 )
 
 add_executable(demo ${SOURCES})
