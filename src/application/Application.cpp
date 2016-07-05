@@ -4,8 +4,12 @@
 
 #include <ctime>
 #include <SDL.h>
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
-#include <GL/glu.h>
+#endif // __APPLE__
 
 #include "Application.h"
 
@@ -24,6 +28,8 @@ Application::Application(SDL_Window* w) {
  * real time for tick processing.
  */
 void Application::run() {
+    running = true;
+
     while (running) {
         dt = 1000.0 * (frameEnd - frameStart) / CLOCKS_PER_SEC;
 
