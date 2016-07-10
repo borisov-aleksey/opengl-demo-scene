@@ -16,6 +16,10 @@
 const int width = 640;
 const int height = 480;
 
+#ifdef _WIN32
+#undef main
+#endif //_WIN32
+
 int main(int argc, const char **argv)
 {
     SDL_Window *window = NULL;
