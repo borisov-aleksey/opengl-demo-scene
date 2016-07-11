@@ -6,9 +6,13 @@
 #define DEMO_SCENE_APPLICATION_H
 
 #include <ctime>
+#include <SDL_TTF.h>
 
 class Application {
     SDL_Window* window;
+    SDL_Renderer * render;
+    TTF_Font * font;
+
     bool running;
     double dt;
     std::clock_t frameStart;
@@ -17,10 +21,14 @@ class Application {
     float xrf, yrf, zrf;
 public:
     Application(SDL_Window*);
+    void renderFont();
     void run();
     void processEvents();
     void processTick();
     void processRender();
+
+private:
+    bool ignoreFont;
 };
 
 

@@ -29,7 +29,17 @@ Application::Application(SDL_Window* w) {
  */
 void Application::run() {
     running = true;
+    TTF_Init();
+    render = SDL_CreateRenderer(window,-1,0);
 
+#ifdef _WIN32
+        font = TTF_OpenFont("..\\resources\\fonts\\font.ttf", 25);
+#else
+        font = TTF_OpenFont("../resources/fonts/font.ttf", 25);
+#endif
+
+    if (font == NULL)
+        ignoreFont = true;
     while (running) {
         dt = 1000.0 * (frameEnd - frameStart) / CLOCKS_PER_SEC;
 
@@ -41,11 +51,32 @@ void Application::run() {
         SDL_GL_SwapWindow(window);
         frameEnd = std::clock();
     }
+    TTF_CloseFont(font);
+    TTF_Quit();
+}
+
+void Application::renderFont(){
+
+    SDL_Color color = { 255, 255, 255 };
+    SDL_Surface * surface = TTF_RenderText_Solid(font, "Bloody Text", color);
+    // surface = TTF_RenderUNICODE_Solid(font, text, color); 
+    SDL_Texture * texture = SDL_CreateTextureFromSurface(render, surface);
+    int texW = 0;
+    int texH = 0;
+    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+    SDL_Rect position = { 0, 0, texW, texH };
+    
+    SDL_RenderCopy(render, texture,  NULL, &position);
+
+    SDL_RenderPresent(render);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
 }
 
 void Application::processRender() {
     cube_draw(xrf, yrf, zrf);
-
+    if(!ignoreFont)
+        renderFont();
     glFlush();
 }
 

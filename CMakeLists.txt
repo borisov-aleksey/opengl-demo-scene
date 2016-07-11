@@ -11,6 +11,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 # Required packages
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -std=c++11")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g3")
@@ -22,6 +23,7 @@ endif()
 
 # include locations
 include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL2_TTF_INCLUDE_DIR})
 include_directories("${CMAKE_SOURCE_DIR}/src")
 
 set(SOURCES
@@ -32,6 +34,7 @@ set(SOURCES
 add_executable(demo ${SOURCES})
 
 target_link_libraries(demo
+	${SDL2_TTF_LIBRARY}
     ${SDL2_LIBRARY}
     ${OPENGL_LIBRARIES}
 )
