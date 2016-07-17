@@ -12,6 +12,7 @@
 #endif // __APPLE__
 
 #include "application/Application.h"
+#include "utils/COutLog.h"
 
 const int width = 640;
 const int height = 480;
@@ -24,6 +25,7 @@ int main(int argc, const char **argv)
 {
     SDL_Window *window = NULL;
     Application *app = NULL;
+    COutLog *log = NULL;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "Failed to init SDL : " << SDL_GetError() << std::endl;
@@ -55,7 +57,9 @@ int main(int argc, const char **argv)
     gluPerspective(45.0f, (float) width / (float) height, 0.1f, 100.0f);
     glMatrixMode(GL_MODELVIEW);
 
-    app = new Application(window);
+    log = new COutLog();
+
+    app = new Application(window, log);
     app->run();
     delete app;
 

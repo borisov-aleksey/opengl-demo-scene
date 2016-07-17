@@ -6,9 +6,11 @@
 #define DEMO_SCENE_APPLICATION_H
 
 #include <ctime>
+#include "../utils/BaseLog.h"
 
 class Application {
     SDL_Window* window;
+    BaseLog* log;
     bool running;
     double dt;
     std::clock_t frameStart;
@@ -17,6 +19,7 @@ class Application {
     float xrf, yrf, zrf;
 public:
     Application(SDL_Window*);
+    Application(SDL_Window*, BaseLog*);
     void run();
     void processEvents();
     void processTick();

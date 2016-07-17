@@ -27,7 +27,7 @@ include_directories("${CMAKE_SOURCE_DIR}/src")
 set(SOURCES
     src/main.cpp
     src/application/Application.cpp
-)
+        src/utils/BaseLog.cpp src/utils/BaseLog.h src/utils/COutLog.cpp src/utils/COutLog.h)
 
 add_executable(demo ${SOURCES})
 

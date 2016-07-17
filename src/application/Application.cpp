@@ -1,7 +1,3 @@
-//
-// Created by ebolgov on 30.06.16.
-//
-
 #include <ctime>
 #include <SDL.h>
 
@@ -9,6 +5,8 @@
 #include <OpenGL/gl.h>
 #else
 #include <GL/gl.h>
+#include <cstdio>
+
 #endif // __APPLE__
 
 #include "Application.h"
@@ -21,6 +19,20 @@ Application::Application(SDL_Window* w) {
     xrf = 0.0f;
     yrf = 0.0f;
     zrf = 0.0f;
+
+    log = new BaseLog();
+}
+
+
+Application::Application(SDL_Window* w, BaseLog* l) {
+    window = w;
+    frameStart = std::clock();
+    frameEnd = std::clock();
+
+    xrf = 0.0f;
+    yrf = 0.0f;
+    zrf = 0.0f;
+    log = l;
 }
 
 /**
@@ -31,7 +43,7 @@ void Application::run() {
     running = true;
 
     while (running) {
-        dt = 1000.0 * (frameEnd - frameStart) / CLOCKS_PER_SEC;
+        dt = ((float)frameEnd - (float)frameStart) / CLOCKS_PER_SEC;
 
         frameStart = std::clock();
         processEvents();
@@ -45,7 +57,7 @@ void Application::run() {
 
 void Application::processRender() {
     cube_draw(xrf, yrf, zrf);
-
+    log->render();
     glFlush();
 }
 
@@ -73,14 +85,15 @@ void Application::processEvents() {
 
 
 void Application::processTick() {
+    float speed = 90;
     if (xrf < 90) {
-        xrf += 1 * dt;
+        xrf += speed * dt;
     } else {
         if (yrf < 90) {
-            yrf += 1 * dt;
+            yrf += speed * dt;
         } else {
             if (zrf < 90) {
-                zrf += 1 * dt;
+                zrf += speed * dt;
             } else {
                 xrf = 0.0f;
                 yrf = 0.0f;
@@ -88,6 +101,9 @@ void Application::processTick() {
             }
         }
     }
+
+    log->add(LOG_FPS, 1.0f / dt);
+    log->add(LOG_TIMER, dt);
     //yrf -= 0.5;
     //zrf -= 0.5;
 }
