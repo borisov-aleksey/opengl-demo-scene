@@ -104,59 +104,10 @@ void Application::processTick() {
 
     log->add(LOG_FPS, 1.0f / dt);
     log->add(LOG_TIMER, dt);
-    //yrf -= 0.5;
-    //zrf -= 0.5;
 }
 
 
 void cube_draw(float xrf, float yrf, float zrf)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -7.0f);
-
-    glRotatef(xrf, 1.0f, 0.0f, 0.0f);
-    glRotatef(yrf, 0.0f, 1.0f, 0.0f);
-    glRotatef(zrf, 0.0f, 0.0f, 1.0f);
-
-    glBegin(GL_QUADS);
-
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f( 1.0f, 1.0f, -1.0f);
-    glVertex3f(-1.0f, 1.0f, -1.0f);
-    glVertex3f(-1.0f, 1.0f,  1.0f);
-    glVertex3f( 1.0f, 1.0f,  1.0f);
-
-    glColor3f(1.0f, 0.5f, 0.0f);
-    glVertex3f( 1.0f, -1.0f,  1.0f);
-    glVertex3f(-1.0f, -1.0f,  1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f( 1.0f, -1.0f, -1.0f);
-
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex3f( 1.0f,  1.0f, 1.0f);
-    glVertex3f(-1.0f,  1.0f, 1.0f);
-    glVertex3f(-1.0f, -1.0f, 1.0f);
-    glVertex3f( 1.0f, -1.0f, 1.0f);
-
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glVertex3f( 1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f,  1.0f, -1.0f);
-    glVertex3f( 1.0f,  1.0f, -1.0f);
-
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(-1.0f,  1.0f,  1.0f);
-    glVertex3f(-1.0f,  1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f,  1.0f);
-
-    glColor3f(1.0f, 0.0f, 1.0f);
-    glVertex3f( 1.0f,  1.0f, -1.0f);
-    glVertex3f( 1.0f,  1.0f,  1.0f);
-    glVertex3f( 1.0f, -1.0f,  1.0f);
-    glVertex3f( 1.0f, -1.0f, -1.0f);
-
-    glEnd();
 }
