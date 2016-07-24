@@ -3,12 +3,11 @@
 #include <iostream>
 #include <SDL.h>
 
+#include <GL/glew.h>
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <OpenGL/gl3.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif // __APPLE__
 
 #include "application/Application.h"
@@ -32,12 +31,16 @@ int main(int argc, const char **argv)
         return EXIT_FAILURE;
     }
 
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
 
-    window = SDL_CreateWindow("Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,
+    window = SDL_CreateWindow("Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height,
             SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
     if (window == NULL) {
         std::cout << "Failed to create window : " << SDL_GetError() << std::endl;
@@ -47,18 +50,15 @@ int main(int argc, const char **argv)
 
     SDL_GLContext glcontext = SDL_GL_CreateContext(window);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClearDepth(1.0);
-    glDepthFunc(GL_LESS);
-    glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(45.0f, (float) width / (float) height, 0.1f, 100.0f);
-    glMatrixMode(GL_MODELVIEW);
+
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK) {
+        std::cout << "failed to initialize GLEW" << std::endl;
+        return -1;
+    }
+    glViewport(0, 0, width, height);
 
     log = new COutLog();
-
     app = new Application(window, log);
     app->run();
     delete app;

@@ -1,14 +1,8 @@
 #version 330 core
 
-in vec3 ourColor;
-in vec2 TexCoord;
-
-out vec4 color;
-
-uniform sampler2D ourTexture1;
-uniform sampler2D ourTexture2;
+layout (location = 0) in vec3 position;
 
 void main()
 {
-    color = mix(texture(ourTexture1, TexCoord), texture(ourTexture2, TexCoord), 0.2);
+    gl_Position = vec4(position.x, position.y, position.z, 1.0);
 }

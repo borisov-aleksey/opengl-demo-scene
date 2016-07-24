@@ -7,6 +7,10 @@
 
 #include <ctime>
 #include "../utils/BaseLog.h"
+#include "Object.h"
+#include "Shader.h"
+
+#include <SDL.h>
 
 class Application {
     SDL_Window* window;
@@ -16,6 +20,8 @@ class Application {
     std::clock_t frameStart;
     std::clock_t frameEnd;
 
+    Object *triangle;
+
     float xrf, yrf, zrf;
 public:
     Application(SDL_Window*);
@@ -24,6 +30,7 @@ public:
     void processEvents();
     void processTick();
     void processRender();
+    Shader *default_shader;
 };
 
 

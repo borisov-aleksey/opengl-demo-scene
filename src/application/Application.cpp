@@ -1,16 +1,16 @@
-#include <ctime>
-#include <SDL.h>
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#include <cstdio>
-
-#endif // __APPLE__
-
 #include "Application.h"
 
+#ifdef __APPLE__
+#include <OpenGL/gl3.h>
+#include <iostream>
+
+#else
+#include <GL/gl.h>
+#endif // __APPLE__
+
+#include <stdio.h>
+
+/*
 Application::Application(SDL_Window* w) {
     window = w;
     frameStart = std::clock();
@@ -22,12 +22,16 @@ Application::Application(SDL_Window* w) {
 
     log = new BaseLog();
 }
+*/
 
 
 Application::Application(SDL_Window* w, BaseLog* l) {
     window = w;
     frameStart = std::clock();
     frameEnd = std::clock();
+
+    triangle = new Object();
+    default_shader = new Shader("shaders/default.vert", "shaders/default.frag");
 
     xrf = 0.0f;
     yrf = 0.0f;
@@ -50,15 +54,22 @@ void Application::run() {
         processTick();
         processRender();
 
-        SDL_GL_SwapWindow(window);
         frameEnd = std::clock();
     }
 }
 
 void Application::processRender() {
-    cube_draw(xrf, yrf, zrf);
-    log->render();
-    glFlush();
+
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    default_shader->Use();
+    glBindVertexArray(triangle->VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+
+    //log->render();
+    SDL_GL_SwapWindow(window);
 }
 
 
@@ -102,8 +113,8 @@ void Application::processTick() {
         }
     }
 
-    log->add(LOG_FPS, 1.0f / dt);
-    log->add(LOG_TIMER, dt);
+    //log->add(LOG_FPS, 1.0f / dt);
+    //log->add(LOG_TIMER, dt);
 }
 
 
