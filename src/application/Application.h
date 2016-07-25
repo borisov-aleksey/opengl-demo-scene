@@ -9,6 +9,7 @@
 #include "../utils/BaseLog.h"
 #include "Object.h"
 #include "Shader.h"
+#include "Character.h"
 
 #include <SDL.h>
 
@@ -31,6 +32,8 @@ public:
     void processTick();
     void processRender();
     Shader *default_shader;
+    Shader *glyph_shader;
+    Character *ch;
 };
 
 

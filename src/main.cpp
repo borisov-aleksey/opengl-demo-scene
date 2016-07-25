@@ -58,6 +58,10 @@ int main(int argc, const char **argv)
     }
     glViewport(0, 0, width, height);
 
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     log = new COutLog();
     app = new Application(window, log);
     app->run();

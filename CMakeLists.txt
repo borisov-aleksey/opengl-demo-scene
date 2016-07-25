@@ -12,6 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 find_package(OpenGL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(glew REQUIRED)
+find_package(Freetype REQUIRED)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -std=c++11")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g3")
@@ -24,16 +25,22 @@ endif()
 # include locations
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories("${CMAKE_SOURCE_DIR}/src")
+include_directories(${FREETYPE_INCLUDE_DIRS})
 
 set(SOURCES
-    src/main.cpp
-    src/application/Application.cpp
-        src/utils/BaseLog.cpp src/utils/BaseLog.h src/utils/COutLog.cpp src/utils/COutLog.h src/application/Shader.cpp src/application/Shader.h src/application/Object.cpp src/application/Object.h)
+        src/main.cpp
+        src/application/Application.cpp
+        src/utils/BaseLog.cpp
+        src/utils/COutLog.cpp
+        src/application/Shader.cpp
+        src/application/Object.cpp
+        src/application/Character.cpp)
 
 add_executable(demo ${SOURCES})
 
 target_link_libraries(demo
-    ${SDL2_LIBRARY}
-    ${OPENGL_LIBRARIES}
+        ${SDL2_LIBRARY}
+        ${OPENGL_LIBRARIES}
         glew
+        freetype
 )

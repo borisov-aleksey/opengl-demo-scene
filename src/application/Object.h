@@ -12,7 +12,9 @@
 class Object {
 private:
     GLfloat *vertices;
-    size_t vertices_count;
+
+    size_t  vertices_count;
+    size_t  vertex_size;
 
 public:
     Object();

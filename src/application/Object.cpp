@@ -3,7 +3,10 @@
 
 Object::Object()
 {
+
+
     vertices = new GLfloat[9];
+
     vertices[0] = -0.9f; vertices[1] = -0.5f; vertices[2] = 0.0f;
     vertices[3] = -0.0f; vertices[4] = -0.5f; vertices[5] = 0.0f;
     vertices[6] = -0.45f; vertices[7] = 0.5f; vertices[8] = 0.0f;
