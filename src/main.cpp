@@ -13,6 +13,7 @@
 
 #include "application/Application.h"
 #include "utils/COutLog.h"
+#include "structures/SceneCube.h"
 
 const int width = 640;
 const int height = 480;
@@ -25,6 +26,7 @@ int main(int argc, const char **argv)
 {
     SDL_Window *window = NULL;
     Application *app = NULL;
+    SceneCube *scene = NULL;
     COutLog *log = NULL;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -59,7 +61,10 @@ int main(int argc, const char **argv)
 
     log = new COutLog();
 
+    scene = new SceneCube();
+
     app = new Application(window, log);
+    app->setScene(scene);
     app->run();
     delete app;
 

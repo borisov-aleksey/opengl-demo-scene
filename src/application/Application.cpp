@@ -10,15 +10,7 @@
 #include "Application.h"
 
 Application::Application(SDL_Window* w) {
-    window = w;
-    frameStart = std::chrono::system_clock::now();
-    frameEnd = std::chrono::system_clock::now();
-
-    xrf = 0.0f;
-    yrf = 0.0f;
-    zrf = 0.0f;
-
-    log = new BaseLog();
+    Application(w, new BaseLog());
 }
 
 
@@ -27,10 +19,19 @@ Application::Application(SDL_Window* w, BaseLog* l) {
     frameStart = std::chrono::system_clock::now();
     frameEnd = std::chrono::system_clock::now();
 
-    xrf = 0.0f;
-    yrf = 0.0f;
-    zrf = 0.0f;
     log = l;
+}
+
+
+Application::~Application() {
+    scene = NULL;
+    window = NULL;
+    log = NULL;
+}
+
+
+void Application::setScene(BaseScene *s) {
+    scene = s;
 }
 
 /**
@@ -48,16 +49,15 @@ void Application::run() {
         processEvents();
         processTick();
         processRender();
-
-        SDL_GL_SwapWindow(window);
         frameEnd = std::chrono::system_clock::now();
     }
 }
 
 void Application::processRender() {
-    cube_draw(xrf, yrf, zrf);
+    scene->render();
     log->render();
     glFlush();
+    SDL_GL_SwapWindow(window);
 }
 
 
@@ -84,78 +84,7 @@ void Application::processEvents() {
 
 
 void Application::processTick() {
-    float speed = 90;
-    if (xrf < 90) {
-        xrf += speed * dt;
-    } else {
-        if (yrf < 90) {
-            yrf += speed * dt;
-        } else {
-            if (zrf < 90) {
-                zrf += speed * dt;
-            } else {
-                xrf = 0.0f;
-                yrf = 0.0f;
-                zrf = 0.0f;
-            }
-        }
-    }
-
+    scene->tick(dt);
     log->add(LOG_DEFAULT, "FPS: %4.4f", 1.0f / dt);
     log->add(LOG_TIMER, "Seconds per frame: %4.6f", dt);
-    //yrf -= 0.5;
-    //zrf -= 0.5;
-}
-
-
-void cube_draw(float xrf, float yrf, float zrf)
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -7.0f);
-
-    glRotatef(xrf, 1.0f, 0.0f, 0.0f);
-    glRotatef(yrf, 0.0f, 1.0f, 0.0f);
-    glRotatef(zrf, 0.0f, 0.0f, 1.0f);
-
-    glBegin(GL_QUADS);
-
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f( 1.0f, 1.0f, -1.0f);
-    glVertex3f(-1.0f, 1.0f, -1.0f);
-    glVertex3f(-1.0f, 1.0f,  1.0f);
-    glVertex3f( 1.0f, 1.0f,  1.0f);
-
-    glColor3f(1.0f, 0.5f, 0.0f);
-    glVertex3f( 1.0f, -1.0f,  1.0f);
-    glVertex3f(-1.0f, -1.0f,  1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f( 1.0f, -1.0f, -1.0f);
-
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex3f( 1.0f,  1.0f, 1.0f);
-    glVertex3f(-1.0f,  1.0f, 1.0f);
-    glVertex3f(-1.0f, -1.0f, 1.0f);
-    glVertex3f( 1.0f, -1.0f, 1.0f);
-
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glVertex3f( 1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f,  1.0f, -1.0f);
-    glVertex3f( 1.0f,  1.0f, -1.0f);
-
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(-1.0f,  1.0f,  1.0f);
-    glVertex3f(-1.0f,  1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f,  1.0f);
-
-    glColor3f(1.0f, 0.0f, 1.0f);
-    glVertex3f( 1.0f,  1.0f, -1.0f);
-    glVertex3f( 1.0f,  1.0f,  1.0f);
-    glVertex3f( 1.0f, -1.0f,  1.0f);
-    glVertex3f( 1.0f, -1.0f, -1.0f);
-
-    glEnd();
 }

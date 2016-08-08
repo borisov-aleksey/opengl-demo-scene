@@ -7,6 +7,7 @@
 
 #include <chrono>
 #include "../utils/BaseLog.h"
+#include "../structures/BaseScene.h"
 
 typedef std::chrono::time_point<std::chrono::system_clock> application_timepoint;
 typedef std::chrono::duration<double> application_frame_length;
@@ -14,23 +15,22 @@ typedef std::chrono::duration<double> application_frame_length;
 class Application {
     SDL_Window* window;
     BaseLog* log;
+    BaseScene* scene;
     bool running;
     double dt;
     application_timepoint frameStart;
     application_timepoint frameEnd;
     application_frame_length frameLength;
 
-    float xrf, yrf, zrf;
 public:
     Application(SDL_Window*);
     Application(SDL_Window*, BaseLog*);
+    ~Application();
     void run();
     void processEvents();
     void processTick();
     void processRender();
+    void setScene(BaseScene*);
 };
-
-
-void cube_draw(float xrf, float yrf, float zrf);
 
 #endif //DEMO_SCENE_APPLICATION_H
