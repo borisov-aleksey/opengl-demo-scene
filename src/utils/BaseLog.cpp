@@ -3,26 +3,39 @@
 //
 
 #include "BaseLog.h"
-#include <iostream>
 #include <cstdio>
+#include <cstring>
+#include <stdarg.h>
 
 BaseLog::BaseLog() {
-    _data = new LogMap;
+    _lines = new logLine[LOG_SIZE];
+    for(int i = 0; i < LOG_SIZE; i++) {
+        _lines[i] = new logChar[LOG_LINE_SIZE];
+        snprintf(_lines[i], 0, "%s", " ");
+    }
 }
 
-void BaseLog::add(logGroup group, std::string message) {
-    LogIterator li = _data->find(group);
-    if (li != _data->end()) {
-        _data->erase(li);
-    }
 
-    (*_data)[group] = message;
+BaseLog::~BaseLog() {
+    for(int i = 0; i < LOG_SIZE; i++) {
+        delete[] _lines[i];
+    }
+    delete[] _lines;
+}
+
+void BaseLog::add(logGroup group, char* message) {
+    strncpy(_lines[group], message, LOG_LINE_SIZE - 1);
 }
 
 void BaseLog::add(logGroup group, double value) {
-    char buffer[10];
-    snprintf(buffer, 9, "%4.4f", value);
-    (*_data)[group] = std::string(buffer);
+    snprintf(_lines[group], 9, "%4.4f", value);
+}
+
+void BaseLog::add(logGroup group, char* format, ...) {
+    va_list args;
+    va_start(args,format);
+    vsnprintf(_lines[group], LOG_LINE_SIZE - 1, format, args);
+    va_end(args);
 }
 
 void BaseLog::render() {}

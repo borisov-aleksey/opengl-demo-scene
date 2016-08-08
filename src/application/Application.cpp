@@ -5,16 +5,14 @@
 #include <OpenGL/gl.h>
 #else
 #include <GL/gl.h>
-#include <cstdio>
-
 #endif // __APPLE__
 
 #include "Application.h"
 
 Application::Application(SDL_Window* w) {
     window = w;
-    frameStart = std::clock();
-    frameEnd = std::clock();
+    frameStart = std::chrono::system_clock::now();
+    frameEnd = std::chrono::system_clock::now();
 
     xrf = 0.0f;
     yrf = 0.0f;
@@ -26,8 +24,8 @@ Application::Application(SDL_Window* w) {
 
 Application::Application(SDL_Window* w, BaseLog* l) {
     window = w;
-    frameStart = std::clock();
-    frameEnd = std::clock();
+    frameStart = std::chrono::system_clock::now();
+    frameEnd = std::chrono::system_clock::now();
 
     xrf = 0.0f;
     yrf = 0.0f;
@@ -43,15 +41,16 @@ void Application::run() {
     running = true;
 
     while (running) {
-        dt = ((float)frameEnd - (float)frameStart) / CLOCKS_PER_SEC;
+        frameLength = frameEnd - frameStart;
+        dt = frameLength.count();
 
-        frameStart = std::clock();
+        frameStart = std::chrono::system_clock::now();
         processEvents();
         processTick();
         processRender();
 
         SDL_GL_SwapWindow(window);
-        frameEnd = std::clock();
+        frameEnd = std::chrono::system_clock::now();
     }
 }
 
@@ -102,8 +101,8 @@ void Application::processTick() {
         }
     }
 
-    log->add(LOG_FPS, 1.0f / dt);
-    log->add(LOG_TIMER, dt);
+    log->add(LOG_DEFAULT, "FPS: %4.4f", 1.0f / dt);
+    log->add(LOG_TIMER, "Seconds per frame: %4.6f", dt);
     //yrf -= 0.5;
     //zrf -= 0.5;
 }
