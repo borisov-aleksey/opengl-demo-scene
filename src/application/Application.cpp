@@ -3,8 +3,8 @@
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
 #include <iostream>
-
 #else
+#include <GL/glew.h>
 #include <GL/gl.h>
 #endif // __APPLE__
 

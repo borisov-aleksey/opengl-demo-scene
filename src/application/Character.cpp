@@ -1,5 +1,4 @@
 #include <iostream>
-#include <GL/glew.h>
 #include "Character.h"
 
 Character::Character(GLubyte character)

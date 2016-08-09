@@ -3,12 +3,17 @@
 
 #include "Shader.h"
 
+#ifdef __APPLE__
+#include <OpenGL/OpenGL.h>
+#include <freetype2/ft2build.h>
+#else
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <ft2build.h>
+#endif //__APPLE__
+
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
-
-#include <OpenGL/OpenGL.h>
-
-#include <freetype2/ft2build.h>
 #include FT_FREETYPE_H
 #include <freetype/freetype.h>
 

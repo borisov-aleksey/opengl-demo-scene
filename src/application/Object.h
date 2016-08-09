@@ -7,7 +7,12 @@
 
 #include <cstdlib>
 
+#ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
+#else
+#include <GL/glew.h>
+#include <GL/gl.h>
+#endif //__APPLE__
 
 class Object {
 private:
