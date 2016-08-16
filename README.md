@@ -25,3 +25,10 @@ for Cygwin under build tools root dir to provide easier configuration. For examp
 2. Download SDL2 development version for MinGW (http://www.libsdl.org/download-2.0.php)
 3. Copy contents from *-mingw32 folder (one of two) to your MinGW installation (don't forget to make minGW backup!)
 4. Everything should be ok now.
+
+## Linux requirements
+
+1. libglm-dev
+2. libglew-dev
+3. libfreetype6-dev
+4. sudo ln -s /usr/include/freetype2 /usr/include/freetype2/freetype
