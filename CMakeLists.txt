@@ -17,6 +17,7 @@ find_package(Freetype REQUIRED)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -std=c++11")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -g3")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
@@ -34,7 +35,10 @@ set(SOURCES
         src/utils/COutLog.cpp
         src/application/Shader.cpp
         src/application/Object.cpp
-        src/application/Character.cpp)
+        src/application/Character.cpp
+        src/structures/BaseScene.cpp
+        src/structures/SceneCube.cpp
+)
 
 add_executable(demo ${SOURCES})
 
