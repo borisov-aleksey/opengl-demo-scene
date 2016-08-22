@@ -4,12 +4,11 @@
 
 #include "COutLog.h"
 #include <iostream>
+#include <cstdio>
 
 void COutLog::render() {
-    LogIterator it;
-
-    for (it = _data->begin(); it != _data->end(); ++it) {
-        std::cout << it->second << std::endl;
+    for (int i = 0; i < LOG_SIZE; i ++) {
+        printf("%s\n", _lines[i]);
     }
 }
 

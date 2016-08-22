@@ -12,25 +12,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-/*
 Application::Application(SDL_Window* w) {
-    window = w;
-    frameStart = std::clock();
-    frameEnd = std::clock();
-
-    xrf = 0.0f;
-    yrf = 0.0f;
-    zrf = 0.0f;
-
-    log = new BaseLog();
+    Application(w, new BaseLog());
 }
-*/
 
 
 Application::Application(SDL_Window* w, BaseLog* l) {
     window = w;
-    frameStart = std::clock();
-    frameEnd = std::clock();
+    frameStart = std::chrono::system_clock::now();
+    frameEnd = std::chrono::system_clock::now();
 
     triangle = new Object();
     default_shader = new Shader("shaders/default.vert", "shaders/default.frag");
@@ -46,7 +36,20 @@ Application::Application(SDL_Window* w, BaseLog* l) {
     xrf = 0.0f;
     yrf = 0.0f;
     zrf = 0.0f;
+
     log = l;
+}
+
+
+Application::~Application() {
+    scene = NULL;
+    window = NULL;
+    log = NULL;
+}
+
+
+void Application::setScene(BaseScene *s) {
+    scene = s;
 }
 
 /**
@@ -57,19 +60,18 @@ void Application::run() {
     running = true;
 
     while (running) {
-        dt = ((float)frameEnd - (float)frameStart) / CLOCKS_PER_SEC;
+        frameLength = frameEnd - frameStart;
+        dt = frameLength.count();
 
-        frameStart = std::clock();
+        frameStart = std::chrono::system_clock::now();
         processEvents();
         processTick();
         processRender();
-
-        frameEnd = std::clock();
+        frameEnd = std::chrono::system_clock::now();
     }
 }
 
 void Application::processRender() {
-
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -80,6 +82,11 @@ void Application::processRender() {
 
     ch->Render(glyph_shader, 25.0f, 23.0f, 1.0f, glm::vec3(0.5f, 0.8f, 0.2f));
     //log->render();
+
+    //scene->render();
+    log->render();
+    //glFlush();
+
     SDL_GL_SwapWindow(window);
 }
 
@@ -107,29 +114,7 @@ void Application::processEvents() {
 
 
 void Application::processTick() {
-    float speed = 90;
-    if (xrf < 90) {
-        xrf += speed * dt;
-    } else {
-        if (yrf < 90) {
-            yrf += speed * dt;
-        } else {
-            if (zrf < 90) {
-                zrf += speed * dt;
-            } else {
-                xrf = 0.0f;
-                yrf = 0.0f;
-                zrf = 0.0f;
-            }
-        }
-    }
-
-    //log->add(LOG_FPS, 1.0f / dt);
-    //log->add(LOG_TIMER, dt);
-}
-
-
-void cube_draw(float xrf, float yrf, float zrf)
-{
-
+    scene->tick(dt);
+    log->add(LOG_DEFAULT, "FPS: %4.4f", 1.0f / dt);
+    log->add(LOG_TIMER, "Seconds per frame: %4.6f", dt);
 }
